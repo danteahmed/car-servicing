@@ -1,16 +1,32 @@
 import React, { useRef } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import auth from '../../firebase.init';
 
 const Login = () => {
+
+   const [signInWithEmailAndPassword, user, loading, error] =
+     useSignInWithEmailAndPassword(auth);
+
    const emailRef = useRef('');
    const passwordRef = useRef('');
    const navigate = useNavigate();
+   const location = useLocation();
 
-   const handleSubmit = event =>{
+   let from = location.state?.from?.pathname || "/";
+
+   if(user){
+      navigate(from, { replace: true });
+   }
+
+   const handleSignIn = event =>{
       event.preventDefault();
       const email = emailRef.current.value;
       const password = passwordRef.current.value;
+
+      signInWithEmailAndPassword(email, password);
+
    }
 
    const navigateReg = event =>{
@@ -20,7 +36,7 @@ const Login = () => {
    return (
      <div className='container w-50 mx-auto'>
        <h2 className='text-primary text-center mt-2'>Please Login</h2>
-       <Form onSubmit={handleSubmit}>
+       <Form onSubmit={handleSignIn}>
          <Form.Group className="mb-3" controlId="formBasicEmail">
            <Form.Label>Email address</Form.Label>
            <Form.Control ref={emailRef} type="email" placeholder="Enter email" required/>
@@ -37,7 +53,7 @@ const Login = () => {
            <Form.Check type="checkbox" label="Check me out" />
          </Form.Group>
          <Button variant="primary" type="submit">
-           Submit
+           Login
          </Button>
        </Form>
        <p className='text-danger'>New to Car Servicing? <Link to='/register' className='text-success pe-auto text-decoration-none' onClick={navigateReg}>Please Register</Link></p>
