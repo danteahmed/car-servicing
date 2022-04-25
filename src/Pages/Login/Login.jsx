@@ -7,6 +7,7 @@ import auth from '../../firebase.init';
 import SocialLogin from './SocialLogin/SocialLogin';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PageTitle from '../Shared/PageTitle/PageTitle';
 
 const Login = () => {
 
@@ -62,6 +63,7 @@ const Login = () => {
 
    return (
      <div className="container w-50 mx-auto">
+       <PageTitle title="Login"></PageTitle>
        <h2 className="text-primary text-center mt-2">Please Login</h2>
        <Form onSubmit={handleSignIn}>
          <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -83,6 +85,7 @@ const Login = () => {
              required
            />
          </Form.Group>
+         {errorMsg}
          <Form.Group
            className="mb-3"
            controlId="formBasicCheckbox"
@@ -95,7 +98,7 @@ const Login = () => {
            Login
          </Button>
        </Form>
-       {errorMsg}
+
        <p className="text-danger">
          New to Car Servicing?{" "}
          <Link
